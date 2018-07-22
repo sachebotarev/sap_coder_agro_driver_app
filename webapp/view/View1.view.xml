@@ -1,9 +1,19 @@
-<mvc:View controllerName="mysap_coder_agro_driver_app.controller.View1" xmlns:html="http://www.w3.org/1999/xhtml"
+<mvc:View controllerName="my.sap_coder_agro_driver_app.controller.View1" xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
 	<App>
 		<pages>
 			<Page title="{i18n>title}">
-				<content></content>
+				<content>
+					<Button text="Init Store" press="onInitStore"/>
+					<Button text="Open Store" press="onOpenStore"/>
+					<Button text="Close Store" press="onCloseStore"/>
+					<Button text="Clear Store" press="onClearStore"/>
+					<Button text="Load Image" press="onLoadImage"/>
+					<Button text="Take Photo" press="onTakePhoto"/>
+					<Button text="Flush Store" press="onFlushStore"/>
+					<Text id="TextId" text=""/>
+					<Image id="ImageId" src=""/>
+				</content>
 			</Page>
 		</pages>
 	</App>

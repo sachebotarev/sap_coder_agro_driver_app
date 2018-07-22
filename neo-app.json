@@ -20,6 +20,14 @@
         "version": "1.44.12"
       },
       "description": "SAPUI5 Test Resources"
+    },
+    {
+      "path": "/odata",
+      "target": {
+        "type": "destination",
+        "name": "my_agro_transp_mangm_odata"
+      },
+      "description": "SAP OData Destination"
     }
   ],
   "sendWelcomeFileRedirect": true

@@ -1,7 +1,7 @@
 {
 	"_version": "1.5.0",
 	"sap.app": {
-		"id": "mysap_coder_agro_driver_app",
+		"id": "my.sap_coder_agro_driver_app",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"applicationVersion": {
@@ -39,7 +39,7 @@
 
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "mysap_coder_agro_driver_app.view.View1",
+			"viewName": "my.sap_coder_agro_driver_app.view.View1",
 			"type": "XML"
 		},
 		"dependencies": {
@@ -62,7 +62,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "mysap_coder_agro_driver_app.i18n.i18n"
+					"bundleName": "my.sap_coder_agro_driver_app.i18n.i18n"
 				}
 			}
 		},
