@@ -1,7 +1,7 @@
 {
 	"_version": "1.5.0",
 	"sap.app": {
-		"id": "mysap_coder_agro_driver_app",
+		"id": "my.sap_coder_agro_driver_app",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"applicationVersion": {
@@ -14,7 +14,6 @@
 			"version": "1.40.12"
 		}
 	},
-
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {
@@ -33,24 +32,22 @@
 		"supportedThemes": [
 			"sap_hcb",
 			"sap_belize"
-
 		]
 	},
-
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "mysap_coder_agro_driver_app.view.View1",
+			"viewName": "my.sap_coder_agro_driver_app.view.FullScreenApp",
 			"type": "XML"
 		},
 		"dependencies": {
-			"minUI5Version": "1.30.0",
+			"minUI5Version": "1.50.0",
 			"libs": {
-				"sap.ui.core": {},
+				"sap.collaboration": {},
 				"sap.m": {},
+				"sap.ui.comp": {},
+				"sap.ui.core": {},
 				"sap.ui.layout": {},
 				"sap.ushell": {},
-				"sap.collaboration": {},
-				"sap.ui.comp": {},
 				"sap.uxap": {}
 			}
 		},
@@ -62,14 +59,88 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "mysap_coder_agro_driver_app.i18n.i18n"
+					"bundleName": "my.sap_coder_agro_driver_app.i18n.i18n"
 				}
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "my.sap_coder_agro_driver_app.view",
+				"targetAggregation": "pages",
+				"clearTarget": false,
+				"bypassed": {
+					"target": [
+						"master",
+						"notFound"
+					]
+				},
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "TransportationList",
+					"view": "TransportationList",
+					"viewPath": "my.sap_coder_agro_driver_app.view",
+					"targetControl": "idFullScreenAppControl",
+					"targetAggregation": "pages"
+				},
+				{
+					"pattern": "Transportation/{sObjectPath}",
+					"name": "Transportation",
+					"view": "Transportation",
+					"viewPath": "my.sap_coder_agro_driver_app.view",
+					"targetControl": "idFullScreenAppControl",
+					"targetAggregation": "pages"
+				},
+				{
+					"pattern": "OfflineStore",
+					"name": "OfflineStore",
+					"view": "OfflineStore",
+					"viewPath": "my.sap_coder_agro_driver_app.view",
+					"targetControl": "idFullScreenAppControl",
+					"targetAggregation": "pages"
+				},
+				{
+					"pattern": "RoadEvent/{sObjectPath}",
+					"name": "RoadEvent",
+					"view": "RoadEvent",
+					"viewPath": "my.sap_coder_agro_driver_app.view",
+					"targetControl": "idFullScreenAppControl",
+					"targetAggregation": "pages"
+				}
+			],
+			"targets": {
+				"TransportationList": {
+					"viewName": "TransportationList",
+					"viewId": "TransportationList",
+					"viewLevel": 1
+				},
+				"Transportation": {
+					"viewName": "Transportation",
+					"viewId": "Transportation",
+					"viewLevel": 1
+				},
+				"OfflineStore": {
+					"viewName": "OfflineStore",
+					"viewId": "OfflineStore",
+					"viewLevel": 1
+				},
+				"RoadEvent": {
+					"viewName": "RoadEvent",
+					"viewId": "RoadEvent",
+					"viewLevel": 1
+				}
+			}
 		}
 	}
 }

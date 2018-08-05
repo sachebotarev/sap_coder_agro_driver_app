@@ -1,0 +1,28 @@
+<mvc:View controllerName="my.sap_coder_agro_driver_app.controller.OfflineStore" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m"
+	xmlns:semantic="sap.m.semantic">
+	<semantic:MasterPage title="Offline Store" navButtonPress="onNavBack" showNavButton="true">
+		<semantic:content>
+			<!--<List id="OfflineStoreListId" items="{ path: '/ErrorArchive' }">
+				<items>
+					<CustomListItem>
+						<VBox>
+							<Label text="{RequestID}"/>
+							<Label text="{RequestMethod}"/>
+							<Label text="{Domain}"/>
+							<Text text="{RequestURL}"/>
+						</VBox>
+					</CustomListItem>
+				</items>
+			</List>-->
+			 <!--, parameters: {expand: 'AffectedEntity'} -->
+		</semantic:content>
+		<semantic:customFooterContent>
+			<OverflowToolbarButton icon="sap-icon://refresh" text="Refresh View" press="onErrorsArchiveRefresh"/>
+			<OverflowToolbarButton icon="sap-icon://download" text="Refresh Data" press="onDataStoreRefresh"/>
+			<OverflowToolbarButton icon="sap-icon://upload" text="flush Data" press="onFlushStore"/>
+			<OverflowToolbarButton icon="sap-icon://delete" text="clear Data" press="onClearStore"/>
+			<OverflowToolbarButton icon="sap-icon://open-folder" text="open Data" press="onOpenStore"/>
+			<OverflowToolbarButton icon="sap-icon://system-exit" text="clear Data" press="onCloseStore"/>
+		</semantic:customFooterContent>
+	</semantic:MasterPage>
+</mvc:View>

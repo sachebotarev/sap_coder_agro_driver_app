@@ -1,0 +1,138 @@
+<mvc:View controllerName="my.sap_coder_agro_driver_app.controller.Transportation" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.m.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:form="sap.ui.layout.form"
+	xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified" xmlns:tbl="sap.ui.table" xmlns:comm="sap.suite.ui.commons">
+	<App id="idAppControl">
+		<pages>
+			<semantic:MasterPage title="Transportation Details" showNavButton="true" navButtonPress="onNavBack">
+				<semantic:content>
+					<PullToRefresh id="pullToRefresh" visible="{device>/support/touch}" refresh="onRefresh"/>
+					<ObjectHeader id="objectHeader" title="Transportation # {/Transportation/TransportationNum}" icon="sap-icon://visits">
+						<attributes>
+							<ObjectAttribute title="Shiping details"
+								text="From {/Transportation/ShipFrom} - {/Transportation/ShippingLocationDetails/Description} To {/Transportation/ShipTo} - {/Transportation/ShippingLocationDetails1/Description}"/>
+						</attributes>
+						<statuses>
+							<!--<ObjectStatus text="{Status}" state="{path:'Status', formatter:'.formatter.transportationStatusState'}"
+								icon="{path:'Status', formatter:'.formatter.transportationStatusIcon'}"/>-->
+						</statuses>
+					</ObjectHeader>
+					<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding">
+						<items>
+							<IconTabFilter icon="sap-icon://map-3" tooltip="{Visit Details}">
+								<html:div id="yandexMapId" style="width: 100%; height: 400px; padding: 0; margin: 0;"></html:div>
+							</IconTabFilter>
+							<IconTabFilter icon="sap-icon://hint" tooltip="Equipment">
+								<form:Form>
+									<form:layout>
+										<form:ResponsiveGridLayout/>
+									</form:layout>
+									<form:formContainers>
+										<form:FormContainer>
+											<form:FormElement label="Kick-off Date">
+												<form:fields>
+													<DateTimePicker
+														value="{path:'/Transportation/KickOffDate', type:'sap.ui.model.type.DateTime', formatOptions: { style: 'short', strictParsing: true}}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Ship From">
+												<form:fields>
+													<Input value="{/Transportation/ShipFrom}"/>
+												</form:fields>
+											</form:FormElement>
+										</form:FormContainer>
+									</form:formContainers>
+								</form:Form>
+							</IconTabFilter>
+							<IconTabFilter icon="sap-icon://gantt-bars" tooltip="Sales Orders">
+								<PlanningCalendar startDate="{path: 'Calendar>/startDate'}" rows="{path: 'Calendar>/rows'}" appointmentsVisualization="Filled"
+									appointmentSelect="handleAppointmentSelect" showEmptyIntervalHeaders="false" showWeekNumbers="true" viewKey="H">
+									<toolbarContent>
+										<Title text="Title" titleStyle="H4"/>
+									</toolbarContent>
+									<views>
+										<PlanningCalendarView key="H" intervalType="Hour" description="hours view" intervalsS="2" intervalsM="2" intervalsL="2"
+											showSubIntervals="true"></PlanningCalendarView>
+										<PlanningCalendarView key="D" intervalType="Day" description="days view" intervalsS="1" intervalsM="3" intervalsL="7"
+											showSubIntervals="true"></PlanningCalendarView>
+									</views>
+									<rows>
+										<PlanningCalendarRow icon="{Calendar>pic}" title="{Calendar>name}" text="{Calendar>role}"
+											appointments="{path : 'Calendar>appointments', templateShareable: 'true'}"
+											intervalHeaders="{path: 'Calendar>headers', templateShareable: 'true'}">
+											<customData>
+												<core:CustomData key="emp-name" value="{Calendar>name}" writeToDom="true"/>
+											</customData>
+											<appointments>
+												<unified:CalendarAppointment startDate="{Calendar>start}" endDate="{Calendar>end}" icon="{Calendar>pic}" title="{Calendar>title}"
+													text="{Calendar>info}" type="{Calendar>type}" tentative="{Calendar>tentative}"></unified:CalendarAppointment>
+											</appointments>
+											<intervalHeaders>
+												<unified:CalendarAppointment startDate="{Calendar>start}" endDate="{Calendar>end}" icon="{Calendar>pic}" title="{Calendar>title}"
+													type="{Calendar>type}"></unified:CalendarAppointment>
+											</intervalHeaders>
+										</PlanningCalendarRow>
+									</rows>
+								</PlanningCalendar>
+							</IconTabFilter>
+							<IconTabFilter icon="sap-icon://pdf-attachment" tooltip="Sales Orders">
+								<Link text="Скачать Товарную Накладную в pdf" target="_blank" href="{/Transportation/MediaResourceDetails/__metadata/media_src}"/>
+								<PDFViewer class="sapUiSmallMarginBegin" source="{/Transportation/MediaResourceDetails/__metadata/media_src}" title="Транспортная Накладная"
+									width="auto" height="25rem">
+									<layoutData>
+										<FlexItemData growFactor="1"/>
+									</layoutData>
+								</PDFViewer>
+							</IconTabFilter>
+							<IconTabFilter icon="sap-icon://email" tooltip="Chat">
+								<VBox width="100%">
+									<comm:Timeline id="idTimeline" enableDoubleSided="true" groupBy="MessageDateTime" growingThreshold="0" filterTitle="Job Title"
+										sortOldestFirst="true" content="{/Chat/Messages}" height="25rem">
+										<comm:content>
+											<comm:TimelineItem id="idTemplateItem" dateTime="{MessageDateTime}" title="{MessageTitle}" userNameClickable="true" text="{MessageText}"
+												userName="{UserName}" filterValue="JobTitle" icon="sap-icon://person-placeholder"></comm:TimelineItem>
+										</comm:content>
+									</comm:Timeline>
+									<Toolbar class="sapUiSmallMarginTop">
+										<Input value="{/Chat/NewMessage}" width="90%"/>
+										<ToolbarSpacer/>
+										<Button icon="sap-icon://email" width="10%"/>
+									</Toolbar>
+								</VBox>
+							</IconTabFilter>
+						</items>
+					</IconTabBar>
+				</semantic:content>
+				<semantic:mainAction>
+					<semantic:MainAction text="Сообщить о проблеме" press="onAddRoadEvent"/>
+				</semantic:mainAction>
+				<!--<semantic:customFooterContent>
+					icon="sap-icon://alert"
+					<Button icon="sap-icon://decline" text="Cancel" press="onTransporationCancel"/>
+					<Button icon="sap-icon://accept" text="Release" press="onTransporationRelease"/>
+					<Button icon="sap-icon://accept" text="Send Requests" press="onTransporationSendRequests"/>
+					<Button icon="sap-icon://save" text="Save" press="onTransporationSave"/>
+				</semantic:customFooterContent>-->
+			</semantic:MasterPage>
+		</pages>
+	</App>
+</mvc:View>
+<!--<mvc:View controllerName="my.sap_coder_agro_driver_app.controller.Transportation" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+	<App>
+		<pages>
+			<Page title="{i18n>title}">
+				<content>
+					<Button text="Init Store" press="onInitStore"/>
+					<Button text="Open Store" press="onOpenStore"/>
+					<Button text="Close Store" press="onCloseStore"/>
+					<Button text="Clear Store" press="onClearStore"/>
+					<Button text="Load Image" press="onLoadImage"/>
+					<Button text="Take Photo" press="onTakePhoto"/>
+					<Button text="Flush Store" press="onFlushStore"/>
+					<Text id="TextId" text=""/>
+					<Image id="ImageId" src=""/>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>-->

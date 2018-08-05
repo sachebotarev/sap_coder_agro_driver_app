@@ -1,0 +1,53 @@
+<mvc:View controllerName="my.sap_coder_agro_driver_app.controller.RoadEvent" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns="sap.m" xmlns:semantic="sap.m.semantic" xmlns:form="sap.ui.layout.form">
+	<semantic:MasterPage title="Дорожное Событие" navButtonPress="onNavBack" showNavButton="true">
+		<semantic:content>
+			<form:Form>
+				<form:layout>
+					<form:ResponsiveGridLayout/>
+				</form:layout>
+				<form:formContainers>
+					<form:FormContainer>
+						<form:FormElement label="Транспортировка">
+							<form:fields>
+								<Text text="{Transportation}"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="Тип дорожного события">
+							<form:fields>
+								<ComboBox selectedKey="{EventType}" items="{secondaryModel>/EventTypes}">
+									<core:ListItem key="{secondaryModel>EventType}" text="{secondaryModel>Description}" additionalText="{secondaryModel>EventType}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="Связанная точка погрузки/выгрузки">
+							<form:fields>
+								<ComboBox selectedKey="{ShippingLocation}" items="{secondaryModel>/RealtedShippingLocations}" showSecondaryValues="true">
+									<core:ListItem key="{secondaryModel>ShippingLocationKey}" text="{secondaryModel>Description}"
+										additionalText="{secondaryModel>ShippingLocationKey}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="Описание">
+							<form:fields>
+								<Input value="{Description}"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="Фото">
+							<form:fields>
+								<Image id="ImageId" src="{secondaryModel>/MediaResource/__metadata/media_src}" width="100%"/>
+								<Button text="Сделать фото" press="onTakePhoto"/>
+							</form:fields>
+						</form:FormElement>
+					</form:FormContainer>
+				</form:formContainers>
+			</form:Form>
+		</semantic:content>
+		<semantic:negativeAction>
+			<semantic:NegativeAction text="Отменить" press="onRoadEventDelete"/>
+		</semantic:negativeAction>
+		<semantic:positiveAction>
+			<semantic:PositiveAction text="Отправить" press="onRoadEventSubmit"/>
+		</semantic:positiveAction>
+	</semantic:MasterPage>
+</mvc:View>

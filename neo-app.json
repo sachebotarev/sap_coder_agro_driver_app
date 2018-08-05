@@ -7,7 +7,7 @@
         "type": "service",
         "name": "sapui5",
         "entryPath": "/resources",
-        "version": "1.44.12"
+        "version": "1.54.8"
       },
       "description": "SAPUI5 Resources"
     },
@@ -17,9 +17,17 @@
         "type": "service",
         "name": "sapui5",
         "entryPath": "/test-resources",
-        "version": "1.44.12"
+        "version": "1.54.8"
       },
       "description": "SAPUI5 Test Resources"
+    },
+    {
+      "path": "/odata",
+      "target": {
+        "type": "destination",
+        "name": "my_agro_transp_mangm_odata"
+      },
+      "description": "SAP OData Destination"
     }
   ],
   "sendWelcomeFileRedirect": true
