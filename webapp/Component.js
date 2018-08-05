@@ -40,7 +40,6 @@ sap.ui.define([
 					})
 					.then(() => MessageToast.show("Store Refreshed"));
 			}
-			this.setModel(models.createDeviceModel(), "device");
 			this.setModel(models.createOdataModel());
 			UIComponent.prototype.init.apply(this, arguments);
 			this._oGlobalErrorHandler = new GlobalErrorHandler();
