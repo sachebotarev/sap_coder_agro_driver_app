@@ -35,8 +35,13 @@
 						</form:FormElement>
 						<form:FormElement label="Фото">
 							<form:fields>
-								<Image id="ImageId" src="{secondaryModel>/MediaResource/__metadata/media_src}" width="100%"/>
+								<Image id="ImageId" src="{MediaResourceDetails/__metadata/media_src}" width="100%"/>
 								<Button text="Сделать фото" press="onTakePhoto"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="Uuid">
+							<form:fields>
+								<Text text="{RoadEventUuid}"/>
 							</form:fields>
 						</form:FormElement>
 					</form:FormContainer>

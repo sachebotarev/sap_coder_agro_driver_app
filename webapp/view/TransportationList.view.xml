@@ -1,33 +1,37 @@
 <mvc:View controllerName="my.sap_coder_agro_driver_app.controller.TransportationList" xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.m.semantic" xmlns:footerbar="sap.ushell.ui.footerbar"
 	xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:unif="sap.ui.unified">
-	<semantic:MasterPage title="Transportation List" showNavButton="true" navButtonPress="onNavBack">
+	<semantic:MasterPage title="Заказы на Транспортировку" showNavButton="false" navButtonPress="onNavBack">
 		<semantic:content>
-			<PullToRefresh id="pullToRefresh" visible="{device>/support/touch}" refresh="onRefresh"/>
+			<PullToRefresh id="PullToRefreshId" visible="{device>/support/touch}" refresh="onRefresh"/>
 			<List items="{/TransportationsForDriver}">
-				<headerToolbar>
-					<Toolbar>
-						<ToolbarSpacer/>
-						<Button icon="sap-icon://refresh" text="Reload" press="onRefresh"/>
-						<Button icon="sap-icon://add" text="New Sales Order" press="onSalesOrderAdd"/>
-					</Toolbar>
-				</headerToolbar>
 				<items>
-					<CustomListItem press="onTransportationDetailsNav" type="Navigation">
-						<HBox>
-							<core:Icon size="2rem" src="sap-icon://shipping-status" class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"/>
-							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{TransportationNum}" design="Bold"/>
-							</VBox>
-							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" width="100%" alignItems="End">
-								<ObjectStatus text="{Status}" state="Warning" icon="sap-icon://accept"/>
-							</VBox>
-						</HBox>
-					</CustomListItem>
+					<ObjectListItem icon="sap-icon://shipping-status"
+						title="Заказ № {TransportationNum}"
+						number="{TotalPriceRub}" numberUnit="руб." press="onTransportationDetailsNav" type="Navigation">
+						<firstStatus>
+							<ObjectStatus text="{path: 'Status', formatter:'.formatter.transportationStatusText'}"
+								state="{path:'Status', formatter:'.formatter.transportationStatusState'}"
+								icon="{path:'Status', formatter:'.formatter.transportationStatusIcon'}"/>
+						</firstStatus>
+						<attributes>
+							<ObjectAttribute text="{TravelMileageKm} км / {TravelTimeMinutes} мин."/>
+							<ObjectAttribute text="{TotalWeight} т / {TotalVolume} м3"/>
+							<ObjectAttribute text="Из {ShippingLocationDetails/Description} в {ShippingLocationDetails1/Description}"/>
+						</attributes>
+					</ObjectListItem>
 				</items>
 			</List>
 		</semantic:content>
 		<semantic:customFooterContent>
+			<HBox>
+			<Text text="Доступен для заказа:" class="sapUiTinyMargin"/>
+			<Switch state="{/Truck/IsAvailable}" customTextOn="Да" customTextOff="Нет" change="onTruckAvailabilityChanged">
+				<layoutData>
+					<FlexItemData growFactor="1"/>
+				</layoutData>
+			</Switch>
+			</HBox>
 			<Button icon="sap-icon://database" text="Настройки" press="onOfflineStoreNav"/>
 		</semantic:customFooterContent>
 	</semantic:MasterPage>

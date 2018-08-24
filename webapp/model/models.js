@@ -4,11 +4,19 @@ sap.ui.define([
 	"com/pepsico/core/sap/mobile/kapsel/odata/OfflineStore",
 	"sap/ui/Device",
 ], function(JSONModel, ODataModel, OfflineStore, Device) {
-	"use strict"; //
+	"use strict"; 
+	// https://agrotrnspmngms0004431717trial.hanatrial.ondemand.com/MyOrders/odata/
 	return {
 		createDeviceModel: function() {
 			var oModel = new JSONModel(Device);
 			oModel.setDefaultBindingMode("OneWay");
+			return oModel;
+		},
+		createSystemModel: function() {
+			var oModel = new JSONModel({
+				currentUser: "S0004431717",
+				truck: "4000"
+			});
 			return oModel;
 		},
 		createOdataModel: function() {
@@ -61,12 +69,11 @@ sap.ui.define([
 				"storePath": "/sdcard",
 				"serviceRoot": "/pepsico_dv1_zcustomer_srv",
 				"definingRequests": {
-					"CustomerSet": "/CustomerSet"
-						/*,
-											"File1Set": {
-												"url": "/File1Set",
-												"retrieveStreams": true
-											}*/
+					"CustomerSet": "/CustomerSet",
+					"File1Set": {
+						"url": "/OfflineFile1Set?$filter=PrvCustNo eq '9999'",
+						"retrieveStreams": true
+					}
 				}
 			});
 		},
@@ -86,11 +93,13 @@ sap.ui.define([
 																	TransportationLocationAssignmentDetails/ShippingLocationDetails,
 																	TruckDetails,
 																	TruckDetails/CarrierDetails,
-																	MediaResourceDetails`,
+																	MediaResourceDetails,
+																	TransportationItemDetails`,
+					"Trucks": '/Trucks?$expand=CarrierDetails',
 					"RoadEvents": '/RoadEvents?$expand=MediaResourceDetails',
-					"ShippingLocations": '/ShippingLocations',
+					"ShippingLocations": '/ShippingLocations?$expand=TransportationDetails,TransportationDetails1,RoadEventDetails',
 					"MediaResources": {
-						url: '/MediaResources',
+						url: "/MediaResources",
 						retrieveStreams: true
 					}
 				}

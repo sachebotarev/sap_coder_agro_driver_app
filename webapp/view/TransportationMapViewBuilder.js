@@ -41,35 +41,75 @@ sap.ui.define([
 					sGeoLocationProperty: "ShippingLocationDetails/GeoLocation",
 					sIcon: "images/farm.png",
 					aBottomDetails: [new PlacemarkDetail({
-						//oContext: new sap.ui.model.Context(this._oODataModel, this._sTransportationPath),
-						oParams: {
-							sIcon: "images/status_3_of_5.png",
-							sIconWidth: "12px",
-							sIconHeight: "12px"
-						}
-					})],
+							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
+							oParams: {
+								fnIcon: (oContext) =>
+									(oContext.getProperty("ShippingLocationDetails/ProcessingTimeScore") === 1) ? "images/status_1_of_5.png" :
+									(oContext.getProperty("ShippingLocationDetails/ProcessingTimeScore") === 2) ? "images/status_2_of_5.png" :
+									(oContext.getProperty("ShippingLocationDetails/ProcessingTimeScore") === 3) ? "images/status_3_of_5.png" :
+									(oContext.getProperty("ShippingLocationDetails/ProcessingTimeScore") === 4) ? "images/status_4_of_5.png" :
+									(oContext.getProperty("ShippingLocationDetails/ProcessingTimeScore") === 5) ? "images/status_5_of_5.png" : "images/unknown.png",
+								sIconWidth: "12px",
+								sIconHeight: "12px"
+							}
+						}),
+						new PlacemarkDetail({
+							oParams: {
+								fnIcon: (oContext) => (oContext.getProperty("ShippingLocationDetails/RoadEventCount") > 0) ? "images/alert.png" : "",
+								sIconWidth: "12px",
+								sIconHeight: "12px"
+							}
+						})],
 					aRightDetails: [new PlacemarkDetail({
-						//oContext: new sap.ui.model.Context(this._oODataModel, this._sTransportationPath),
 						oParams: {
-							sIcon: "images/checked.png",
-							sIconWidth: "10px",
-							sIconHeight: "10px"
+							fnText: (oContext) => ""
 						}
 					})],
-					aHintDetails: [new PlacemarkDetail({
-						//oContext: new sap.ui.model.Context(this._oODataModel, this._sTransportationPath),
-						oParams: {
-							fnText: (oContext) => "Ship From: " + oContext.getProperty("ShipFrom")
-						}
-					})],
+					aHintDetails: [
+						new PlacemarkDetail({
+							oParams: {
+								fnText: (oContext) => "<b>Ферма</b>: " + oContext.getProperty("ShippingLocationDetails/Description") +
+									" (" + oContext.getProperty("ShippingLocationDetails/ShippingLocationKey") + ")"
+							}
+						}),
+						new PlacemarkDetail({
+							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
+							oParams: {
+								fnText: (oContext) => "<b>Адрес</b>: " + oContext.getProperty("ShippingLocationDetails/RegionName") + ", " + 
+									 oContext.getProperty("ShippingLocationDetails/City") + ", " +
+									 oContext.getProperty("ShippingLocationDetails/Street") + ", " +
+									 oContext.getProperty("ShippingLocationDetails/AddressLine")
+							}
+						}),
+						new PlacemarkDetail({
+							oParams: {
+								fnText: (oContext) => "<b>Время подъезда</b>: " + oContext.getProperty("ArrivalTimeMinutes") + " мин."
+							}
+						}),
+						new PlacemarkDetail({
+							oParams: {
+								fnText: (oContext) => "<b>Расстояние</b>: " + oContext.getProperty("ArrivalMileageKm") + " км"
+							}
+						}),
+						new PlacemarkDetail({
+							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
+							oParams: {
+								fnText: (oContext) => "<b>Время ожидания погрузки</b>: " + oContext.getProperty("LoadQueueTimeMinutes") + " мин."
+							}
+						}),
+						new PlacemarkDetail({
+							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
+							oParams: {
+								fnText: (oContext) => "<b>Время погрузки</b>: " + oContext.getProperty("LoadTimeMinutes") + " мин."
+							}
+						})
+					],
 					aPlacemarkActions: [new PlacemarkAction({
-						//oContext: new sap.ui.model.Context(this._oODataModel, this._sTransportationPath),
 						oParams: {
-							fnText: (oContext) => "Details",
+							fnText: (oContext) => "Подробнее",
 							fnOnPress: (
-									oContext
-								) =>
-								this._oController.onNavigateToProducingLocationDetails(oContext.getProperty("").ShippingLocationDetails.__ref)
+								oContext
+							) => this._oController.ShippingLocationDetailsNav(oContext.getProperty("").ShippingLocationDetails.ShippingLocationKey)
 						}
 					})]
 				}
@@ -85,65 +125,67 @@ sap.ui.define([
 						//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
 						oParams: {
 							fnIcon: (oContext) =>
-								(oContext.getProperty("ProcessingTimeScore") === 1) ? "images/status_1_of_5.png" :
-								(oContext.getProperty("ProcessingTimeScore") === 2) ? "images/status_2_of_5.png" :
-								(oContext.getProperty("ProcessingTimeScore") === 3) ? "images/status_3_of_5.png" :
-								(oContext.getProperty("ProcessingTimeScore") === 4) ? "images/status_4_of_5.png" :
-								(oContext.getProperty("ProcessingTimeScore") === 5) ? "images/status_5_of_5.png" : "images/unknown.png",
+								(oContext.getProperty("ShippingLocationDetails1/ProcessingTimeScore") === 1) ? "images/status_1_of_5.png" :
+								(oContext.getProperty("ShippingLocationDetails1/ProcessingTimeScore") === 2) ? "images/status_2_of_5.png" :
+								(oContext.getProperty("ShippingLocationDetails1/ProcessingTimeScore") === 3) ? "images/status_3_of_5.png" :
+								(oContext.getProperty("ShippingLocationDetails1/ProcessingTimeScore") === 4) ? "images/status_4_of_5.png" :
+								(oContext.getProperty("ShippingLocationDetails1/ProcessingTimeScore") === 5) ? "images/status_5_of_5.png" : "images/unknown.png",
 							sIconWidth: "12px",
 							sIconHeight: "12px"
 						}
 					})],
 					aRightDetails: [new PlacemarkDetail({
-						//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
 						oParams: {
-							sIcon: "images/checked.png",
-							sIconWidth: "10px",
-							sIconHeight: "10px",
-							fnIsVisible: (oContext) => true
+							fnText: (oContext) => ""
 						}
 					})],
 					aHintDetails: [
 						new PlacemarkDetail({
-							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
 							oParams: {
-								fnText: (oContext) => "<b>Shipping Location</b>: " + oContext.getProperty("ShipToLocation") +
-									" (" + oContext.getProperty("ShippingLocationDetails/Description") + ")"
+								fnText: (oContext) => "<b>База хранения</b>: " + oContext.getProperty("ShippingLocationDetails1/Description") +
+									" (" + oContext.getProperty("ShippingLocationDetails1/ShippingLocationKey") + ")"
 							}
 						}),
 						new PlacemarkDetail({
 							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
 							oParams: {
-								fnText: (oContext) => "<b>Processing Time</b>: " + oContext.getProperty("ProcessingTimeMinutes") + " min"
+								fnText: (oContext) => "<b>Адрес</b>: " + oContext.getProperty("ShippingLocationDetails1/RegionName") + ", " + 
+									 oContext.getProperty("ShippingLocationDetails1/City") + ", " +
+									 oContext.getProperty("ShippingLocationDetails1/Street") + ", " +
+									 oContext.getProperty("ShippingLocationDetails1/AddressLine")
+							}
+						}),
+						new PlacemarkDetail({
+							oParams: {
+								fnText: (oContext) => "<b>Время в пути</b>: " + oContext.getProperty("TravelTimeMinutes") + " мин."
+							}
+						}),
+						new PlacemarkDetail({
+							oParams: {
+								fnText: (oContext) => "<b>Расстояние</b>: " + oContext.getProperty("TravelMileageKm") + " км"
 							}
 						}),
 						new PlacemarkDetail({
 							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
 							oParams: {
-								fnText: (oContext) => "<b>Travel Time</b>: " + oContext.getProperty("TravelTimeMinutes") + " min"
+								fnText: (oContext) => "<b>Время ожидания разгрузки</b>: " + oContext.getProperty("UnloadQueueTimeMinutes") + " мин."
 							}
 						}),
 						new PlacemarkDetail({
 							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
 							oParams: {
-								fnText: (oContext) => "<b>Queue Time</b>: " + oContext.getProperty("UnloadQueueTimeMinutes") + " min"
-							}
-						}),
-						new PlacemarkDetail({
-							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
-							oParams: {
-								fnText: (oContext) => "<b>Unload Time</b>: " + oContext.getProperty("UnloadTimeMinutes") + " min"
+								fnText: (oContext) => "<b>Время разгрузки</b>: " + oContext.getProperty("UnloadTimeMinutes") + " мин."
 							}
 						})
 					],
 					aPlacemarkActions: [new PlacemarkAction({
 						//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
 						oParams: {
-							fnText: (oContext) => "Details",
+							fnText: (oContext) => "Подробнее",
 							fnOnPress: (
 									oContext
 								) =>
-								this._oController.onNavigateToStorageLocationDetails(oContext.getProperty("").ShippingLocationDetails.__ref)
+								this._oController.ShippingLocationDetailsNav(oContext.getProperty("").ShippingLocationDetails1.ShippingLocationKey)
 						}
 					})]
 				}
@@ -156,72 +198,16 @@ sap.ui.define([
 				oParams: {
 					sGeoLocationProperty: "TruckDetails/GeoLocation",
 					sIcon: "images/truck_257_136.png",
-					aBottomDetails: [
-						new PlacemarkDetail({
-							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
-							oParams: {
-								fnIcon: (oContext) =>
-									(oContext.getProperty("ArrivalTimeScore") === 1) ? "images/status_1_of_5.png" :
-									(oContext.getProperty("ArrivalTimeScore") === 2) ? "images/status_2_of_5.png" :
-									(oContext.getProperty("ArrivalTimeScore") === 3) ? "images/status_3_of_5.png" :
-									(oContext.getProperty("ArrivalTimeScore") === 4) ? "images/status_4_of_5.png" :
-									(oContext.getProperty("ArrivalTimeScore") === 5) ? "images/status_5_of_5.png" : "images/unknown.png",
-								sIconWidth: "12px",
-								sIconHeight: "12px"
-							}
-						})
-					],
-					aRightDetails: [],
+					aBottomDetails: [new PlacemarkDetail({
+						oParams: {
+							fnText: (oContext) => ""
+						}
+					})],
 					oCenterDetails: new PlacemarkDetail({
 						oParams: {
-							fnText: (oContext) => "1"
+							fnText: (oContext) => ""
 						}
-					}),
-					aHintDetails: [
-						new PlacemarkDetail({
-							oParams: {
-								fnText: (oContext) => "<b>Truck:</b> " + oContext.getProperty("Truck") +
-									" (" + oContext.getProperty("TruckDetails/Description") + ")"
-							}
-						}),
-						new PlacemarkDetail({
-							oParams: {
-								fnText: (oContext) => "<b>Carrier:</b> " + oContext.getProperty("TruckDetails/Carrier") +
-									" (" + oContext.getProperty("TruckDetails/CarrierDetails/Name") + ")"
-							}
-						}),
-						new PlacemarkDetail({
-							oParams: {
-								fnText: (oContext) => "<b>Arrival Time:</b> " + oContext.getProperty("ArrivalTimeMinutes") + " min"
-							}
-						}),
-						new PlacemarkDetail({
-							oParams: {
-								fnText: (oContext) => "<b>Max Capacity:</b> " + oContext.getProperty("TruckDetails/MaxWeight") + " ton"
-							}
-						})
-					],
-					aPlacemarkActions: [new PlacemarkAction({
-							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
-							oParams: {
-								fnText: (oContext) => "Assign Truck",
-								fnOnPress: (
-										oContext
-									) =>
-									this._oController.onAcceptTruck(oContext.getProperty("Transportation"), oContext.getProperty("Truck"))
-							}
-						}),
-						new PlacemarkAction({
-							//oContext: new sap.ui.model.Context(this._oODataModel, "/" + sItemPath),
-							oParams: {
-								fnText: (oContext) => "Details",
-								fnOnPress: (
-										oContext
-									) =>
-									this._oController.onNavigateToTruckDetails(oContext.getProperty("").TruckDetails.__ref)
-							}
-						})
-					]
+					})
 				}
 			});
 		},

@@ -2,7 +2,7 @@
 	xmlns:semantic="sap.m.semantic">
 	<semantic:MasterPage title="Offline Store" navButtonPress="onNavBack" showNavButton="true">
 		<semantic:content>
-			<!--<List id="OfflineStoreListId" items="{ path: '/ErrorArchive' }">
+			<List id="OfflineStoreListId" items="{ path: '/ErrorArchive' }">
 				<items>
 					<CustomListItem>
 						<VBox>
@@ -13,8 +13,10 @@
 						</VBox>
 					</CustomListItem>
 				</items>
-			</List>-->
-			 <!--, parameters: {expand: 'AffectedEntity'} -->
+			</List>
+			<Input value="{SystemModel>/currentUser}"/>
+			<Input value="{SystemModel>/truck}"/>
+			 <!--, parameters: {expand: 'AffectedEntity'}  , parameters: {expand: 'RequestEntity'} -->
 		</semantic:content>
 		<semantic:customFooterContent>
 			<OverflowToolbarButton icon="sap-icon://refresh" text="Refresh View" press="onErrorsArchiveRefresh"/>
@@ -23,6 +25,7 @@
 			<OverflowToolbarButton icon="sap-icon://delete" text="clear Data" press="onClearStore"/>
 			<OverflowToolbarButton icon="sap-icon://open-folder" text="open Data" press="onOpenStore"/>
 			<OverflowToolbarButton icon="sap-icon://system-exit" text="clear Data" press="onCloseStore"/>
+			<OverflowToolbarButton icon="sap-icon://add-photo" text="clear Data" press="onTest"/>
 		</semantic:customFooterContent>
 	</semantic:MasterPage>
 </mvc:View>

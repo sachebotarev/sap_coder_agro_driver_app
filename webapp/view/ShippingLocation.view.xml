@@ -1,0 +1,104 @@
+<mvc:View controllerName="my.sap_coder_agro_driver_app.controller.ShippingLocation" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.m.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:form="sap.ui.layout.form"
+	xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified" xmlns:tbl="sap.ui.table" xmlns:comm="sap.suite.ui.commons">
+	<App id="idAppControl1">
+		<pages>
+			<semantic:MasterPage title="Детали точки {=(${/ShippingLocation/LocationType} === 'PRODUCING') ? 'погрузки' : 'разгрузки'}"
+				showNavButton="true" navButtonPress="onNavBack">
+				<semantic:content>
+					<PullToRefresh visible="{device>/support/touch}" refresh="onRefresh"/>
+					<ObjectHeader condensed="false"
+						title="{=(${/ShippingLocation/LocationType} === 'PRODUCING') ? 'Ферма' : 'База Хранения'} {/ShippingLocation/Description} ({/ShippingLocation/ShippingLocationKey})"
+						icon="sap-icon://building">
+						<!--<attributes>
+							<ObjectAttribute title="Shiping details"
+								text="From {/Transportation/ShipFrom} - {/Transportation/ShippingLocationDetails/Description} To {/Transportation/ShipTo} - {/Transportation/ShippingLocationDetails1/Description}"/>
+						</attributes>-->
+						<statuses>
+							<ObjectStatus text="Работает" state="Success" icon="sap-icon://accept"/>
+						</statuses>
+					</ObjectHeader>
+					<IconTabBar class="sapUiResponsiveContentPadding">
+						<items>
+							<IconTabFilter icon="sap-icon://map-3" tooltip="{Visit Details}">
+								<html:div id="yandexMapShippingLocationId" style="width: 100%; height: 400px; padding: 0; margin: 0;"></html:div>
+							</IconTabFilter>
+							<IconTabFilter icon="sap-icon://hint" tooltip="Equipment">
+								<form:Form>
+									<form:layout>
+										<form:ResponsiveGridLayout/>
+									</form:layout>
+									<form:formContainers>
+										<form:FormContainer>
+											<form:FormElement label="Точка {=(${/ShippingLocation/LocationType} === 'PRODUCING') ? 'погрузки' : 'разгрузки'}">
+												<form:fields>
+													<Text text="{/ShippingLocation/Description} ({/ShippingLocation/ShippingLocationKey})"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Регион">
+												<form:fields>
+													<Text text="{/ShippingLocation/Region}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Гео координаты">
+												<form:fields>
+													<Text text="{/ShippingLocation/GeoLocation}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Адрес">
+												<form:fields>
+													<Text text="{/ShippingLocation/RegionName}, {/ShippingLocation/City}, {/ShippingLocation/Street}, {/ShippingLocation/AddressLine}"/>
+												</form:fields>
+											</form:FormElement>
+										</form:FormContainer>
+									</form:formContainers>
+								</form:Form>
+							</IconTabFilter>
+							<IconTabFilter icon="sap-icon://gantt-bars" tooltip="Sales Orders">
+								<PlanningCalendar startDate="{path: '/Timeline/startDate'}" rows="{path: '/Timeline/rows'}" appointmentsVisualization="Filled"
+									appointmentSelect="handleAppointmentSelect" showEmptyIntervalHeaders="false" showWeekNumbers="true" viewKey="H">
+									<views>
+										<PlanningCalendarView key="H" intervalType="Hour" description="hours view" intervalsS="1" intervalsM="1" intervalsL="1"
+											showSubIntervals="true"></PlanningCalendarView>
+										<PlanningCalendarView key="D" intervalType="Day" description="days view" intervalsS="1" intervalsM="1" intervalsL="1"
+											showSubIntervals="true"></PlanningCalendarView>
+									</views>
+									<rows>
+										<PlanningCalendarRow icon="{pic}" title="{name}" text="{role}" appointments="{path : 'appointments', templateShareable: 'true'}"
+											intervalHeaders="{path: 'headers', templateShareable: 'true'}">
+											<customData>
+												<core:CustomData key="emp-name" value="{name}" writeToDom="true"/>
+											</customData>
+											<appointments>
+												<unified:CalendarAppointment startDate="{start}" endDate="{end}" icon="{pic}" title="{title}" text="{Calendar>info}" type="{type}"
+													tentative="{tentative}"></unified:CalendarAppointment>
+											</appointments>
+											<intervalHeaders>
+												<unified:CalendarAppointment startDate="{start}" endDate="{end}" icon="{pic}" title="{title}" type="{type}"></unified:CalendarAppointment>
+											</intervalHeaders>
+										</PlanningCalendarRow>
+									</rows>
+								</PlanningCalendar>
+							</IconTabFilter>
+							<IconTabFilter icon="sap-icon://quality-issue" tooltip="Sales Orders">
+								<Carousel loop="true" pages="{/ShippingLocation/RoadEventDetails}">
+									<FlexBox width="100%" alignItems="Center" justifyContent="Center">
+										<items>
+											<VBox justifyContent="Center" AlignItems="Center" width="90%">
+												<ObjectAttribute title="Тип" text="Плохое Состояние Дороги"/>
+												<ObjectAttribute title="Описание" text="{Description}"/>
+												<ObjectAttribute title="Сообщил" text="Юрий С."/>
+												<ObjectStatus text="Новое" state="Success" icon="sap-icon://accept"/>
+												<Image id="ImageId" src="{MediaResourceDetails/__metadata/media_src}" width="100%"/>
+											</VBox>
+										</items>
+									</FlexBox>
+								</Carousel>
+							</IconTabFilter>
+						</items>
+					</IconTabBar>
+				</semantic:content>
+			</semantic:MasterPage>
+		</pages>
+	</App>
+</mvc:View>

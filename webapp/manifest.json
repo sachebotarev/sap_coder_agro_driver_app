@@ -103,6 +103,14 @@
 					"targetAggregation": "pages"
 				},
 				{
+					"pattern": "ShippingLocation/{sObjectPath}",
+					"name": "ShippingLocation",
+					"view": "ShippingLocation",
+					"viewPath": "my.sap_coder_agro_driver_app.view",
+					"targetControl": "idFullScreenAppControl",
+					"targetAggregation": "pages"
+				},
+				{
 					"pattern": "OfflineStore",
 					"name": "OfflineStore",
 					"view": "OfflineStore",
@@ -128,6 +136,11 @@
 				"Transportation": {
 					"viewName": "Transportation",
 					"viewId": "Transportation",
+					"viewLevel": 1
+				},
+				"ShippingLocation": {
+					"viewName": "ShippingLocation",
+					"viewId": "ShippingLocation",
 					"viewLevel": 1
 				},
 				"OfflineStore": {

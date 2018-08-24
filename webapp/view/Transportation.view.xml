@@ -3,18 +3,15 @@
 	xmlns:core="sap.ui.core" xmlns:unified="sap.ui.unified" xmlns:tbl="sap.ui.table" xmlns:comm="sap.suite.ui.commons">
 	<App id="idAppControl">
 		<pages>
-			<semantic:MasterPage title="Transportation Details" showNavButton="true" navButtonPress="onNavBack">
+			<semantic:MasterPage title="Детали Заказа на Транспортировку" showNavButton="true" navButtonPress="onNavBack">
 				<semantic:content>
-					<PullToRefresh id="pullToRefresh" visible="{device>/support/touch}" refresh="onRefresh"/>
-					<ObjectHeader id="objectHeader" title="Transportation # {/Transportation/TransportationNum}" icon="sap-icon://visits">
-						<attributes>
+					<PullToRefresh id="PullToRefreshId" visible="{device>/support/touch}" refresh="onViewRefresh"/>
+					<ObjectHeader condensed="true" title="Заказ № {/Transportation/TransportationNum} ({path: '/Transportation/Status', formatter:'.formatter.transportationStatusText'})" icon="sap-icon://shipping-status">
+						<!--<attributes>
 							<ObjectAttribute title="Shiping details"
 								text="From {/Transportation/ShipFrom} - {/Transportation/ShippingLocationDetails/Description} To {/Transportation/ShipTo} - {/Transportation/ShippingLocationDetails1/Description}"/>
-						</attributes>
-						<statuses>
-							<!--<ObjectStatus text="{Status}" state="{path:'Status', formatter:'.formatter.transportationStatusState'}"
-								icon="{path:'Status', formatter:'.formatter.transportationStatusIcon'}"/>-->
-						</statuses>
+						</attributes>-->
+						<statuses></statuses>
 					</ObjectHeader>
 					<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding">
 						<items>
@@ -28,90 +25,301 @@
 									</form:layout>
 									<form:formContainers>
 										<form:FormContainer>
-											<form:FormElement label="Kick-off Date">
+											<form:FormElement label="Статус">
 												<form:fields>
-													<DateTimePicker
-														value="{path:'/Transportation/KickOffDate', type:'sap.ui.model.type.DateTime', formatOptions: { style: 'short', strictParsing: true}}"/>
+													<ObjectStatus text="{path: '/Transportation/Status', formatter:'.formatter.transportationStatusText'}"
+														state="{path:'/Transportation/Status', formatter:'.formatter.transportationStatusState'}"
+														icon="{path:'/Transportation/Status', formatter:'.formatter.transportationStatusIcon'}"/>
 												</form:fields>
 											</form:FormElement>
-											<form:FormElement label="Ship From">
+											<form:FormElement label="Дата и время поступления заказа">
 												<form:fields>
-													<Input value="{/Transportation/ShipFrom}"/>
+													<Text text="{path:'/Transportation/KickOffDate', type:'sap.ui.model.type.DateTime', formatOptions: { style: 'short', strictParsing: true}}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Отправитель">
+												<form:fields>
+													<Text text="{/Transportation/ShipFrom} ({/Transportation/ShippingLocationDetails/Description})"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Получатель">
+												<form:fields>
+													<Text text="{/Transportation/ShipTo} ({/Transportation/ShippingLocationDetails1/Description})"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Стоимость">
+												<form:fields>
+													<Text text="{/Transportation/TotalPriceRub} руб"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Вес и Объем">
+												<form:fields>
+													<Text text="{/Transportation/TotalWeight} т / {/Transportation/TotalVolume} м3"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Расстояние и Время">
+												<form:fields>
+													<Text text="{/Transportation/TravelMileageKm} км / {/Transportation/TravelTimeMinutes} мин."/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Комментарий">
+												<form:fields>
+													<Text text="{/Transportation/Comment}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Накладная">
+												<form:fields>
+													<Link text="Скачать Товарную Накладную в pdf" target="_blank" href="{/Transportation/MediaResourceDetails/__metadata/media_src}"/>
+													<!--<PDFViewer class="sapUiSmallMarginBegin" source="{/Transportation/MediaResourceDetails/__metadata/media_src}" title="Транспортная Накладная"
+														width="auto" height="25rem">
+														<layoutData>
+															<FlexItemData growFactor="1"/>
+														</layoutData>
+													</PDFViewer>-->
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Позиции к перевозке">
+												<form:fields>
+													<List items="{/Transportation/TransportationItemDetails/results}">
+														<items>
+															<ObjectListItem icon="sap-icon://product" title="{Description}" number="{Quantity}" numberUnit="{QuantityUom}">
+																<attributes>
+																	<ObjectAttribute text="{Weight} т"/>
+																	<ObjectAttribute text="{Volume} м3"/>
+																</attributes>
+															</ObjectListItem>
+														</items>
+													</List>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="WorkflowTaskId">
+												<form:fields>
+													<Text text="{/Workflow/TaskId}"/>
 												</form:fields>
 											</form:FormElement>
 										</form:FormContainer>
 									</form:formContainers>
 								</form:Form>
 							</IconTabFilter>
-							<IconTabFilter icon="sap-icon://gantt-bars" tooltip="Sales Orders">
-								<PlanningCalendar startDate="{path: 'Calendar>/startDate'}" rows="{path: 'Calendar>/rows'}" appointmentsVisualization="Filled"
-									appointmentSelect="handleAppointmentSelect" showEmptyIntervalHeaders="false" showWeekNumbers="true" viewKey="H">
-									<toolbarContent>
-										<Title text="Title" titleStyle="H4"/>
-									</toolbarContent>
-									<views>
-										<PlanningCalendarView key="H" intervalType="Hour" description="hours view" intervalsS="2" intervalsM="2" intervalsL="2"
-											showSubIntervals="true"></PlanningCalendarView>
-										<PlanningCalendarView key="D" intervalType="Day" description="days view" intervalsS="1" intervalsM="3" intervalsL="7"
-											showSubIntervals="true"></PlanningCalendarView>
-									</views>
-									<rows>
-										<PlanningCalendarRow icon="{Calendar>pic}" title="{Calendar>name}" text="{Calendar>role}"
-											appointments="{path : 'Calendar>appointments', templateShareable: 'true'}"
-											intervalHeaders="{path: 'Calendar>headers', templateShareable: 'true'}">
-											<customData>
-												<core:CustomData key="emp-name" value="{Calendar>name}" writeToDom="true"/>
-											</customData>
-											<appointments>
-												<unified:CalendarAppointment startDate="{Calendar>start}" endDate="{Calendar>end}" icon="{Calendar>pic}" title="{Calendar>title}"
-													text="{Calendar>info}" type="{Calendar>type}" tentative="{Calendar>tentative}"></unified:CalendarAppointment>
-											</appointments>
-											<intervalHeaders>
-												<unified:CalendarAppointment startDate="{Calendar>start}" endDate="{Calendar>end}" icon="{Calendar>pic}" title="{Calendar>title}"
-													type="{Calendar>type}"></unified:CalendarAppointment>
-											</intervalHeaders>
-										</PlanningCalendarRow>
-									</rows>
-								</PlanningCalendar>
-							</IconTabFilter>
-							<IconTabFilter icon="sap-icon://pdf-attachment" tooltip="Sales Orders">
-								<Link text="Скачать Товарную Накладную в pdf" target="_blank" href="{/Transportation/MediaResourceDetails/__metadata/media_src}"/>
-								<PDFViewer class="sapUiSmallMarginBegin" source="{/Transportation/MediaResourceDetails/__metadata/media_src}" title="Транспортная Накладная"
-									width="auto" height="25rem">
-									<layoutData>
-										<FlexItemData growFactor="1"/>
-									</layoutData>
-								</PDFViewer>
-							</IconTabFilter>
-							<IconTabFilter icon="sap-icon://email" tooltip="Chat">
+							<IconTabFilter id="chatIconTabFilterId" icon="sap-icon://email" tooltip="Chat" count="{/Chat/UnreadMessagesCount}">
 								<VBox width="100%">
-									<comm:Timeline id="idTimeline" enableDoubleSided="true" groupBy="MessageDateTime" growingThreshold="0" filterTitle="Job Title"
-										sortOldestFirst="true" content="{/Chat/Messages}" height="25rem">
+									<comm:Timeline enableDoubleSided="true" groupBy="MessageDateTime" filterTitle="Сообщение" sortOldestFirst="true" content="{/Chat/Messages}"
+										noDataText="Сообщений нет">
 										<comm:content>
 											<comm:TimelineItem id="idTemplateItem" dateTime="{MessageDateTime}" title="{MessageTitle}" userNameClickable="true" text="{MessageText}"
 												userName="{UserName}" filterValue="JobTitle" icon="sap-icon://person-placeholder"></comm:TimelineItem>
 										</comm:content>
 									</comm:Timeline>
 									<Toolbar class="sapUiSmallMarginTop">
-										<Input value="{/Chat/NewMessage}" width="90%"/>
+										<Input value="{/Chat/NewMessage}" width="90%" submit="onChatSendMessage"/>
 										<ToolbarSpacer/>
-										<Button icon="sap-icon://email" width="10%"/>
+										<Button icon="sap-icon://email" width="10%" press="onChatSendMessage"/>
 									</Toolbar>
 								</VBox>
+							</IconTabFilter>
+							<IconTabFilter icon="sap-icon://gantt-bars" tooltip="Sales Orders">
+								<PlanningCalendar startDate="{path: '/Timeline/startDate'}" rows="{path: '/Timeline/rows'}" appointmentsVisualization="Filled"
+									appointmentSelect="handleAppointmentSelect" showEmptyIntervalHeaders="false" showWeekNumbers="true" viewKey="H">
+									<views>
+										<PlanningCalendarView key="H" intervalType="Hour" description="hours view" intervalsS="1" intervalsM="1" intervalsL="1"
+											showSubIntervals="true"></PlanningCalendarView>
+										<PlanningCalendarView key="D" intervalType="Day" description="days view" intervalsS="1" intervalsM="1" intervalsL="1"
+											showSubIntervals="true"></PlanningCalendarView>
+									</views>
+									<rows>
+										<PlanningCalendarRow icon="{pic}" title="{name}" text="{role}" appointments="{path : 'appointments', templateShareable: 'true'}"
+											intervalHeaders="{path: 'headers', templateShareable: 'true'}">
+											<customData>
+												<core:CustomData key="emp-name" value="{name}" writeToDom="true"/>
+											</customData>
+											<appointments>
+												<unified:CalendarAppointment startDate="{start}" endDate="{end}" icon="{pic}" title="{title}" text="{Calendar>info}" type="{type}"
+													tentative="{tentative}"></unified:CalendarAppointment>
+											</appointments>
+											<intervalHeaders>
+												<unified:CalendarAppointment startDate="{start}" endDate="{end}" icon="{pic}" title="{title}" type="{type}"></unified:CalendarAppointment>
+											</intervalHeaders>
+										</PlanningCalendarRow>
+									</rows>
+								</PlanningCalendar>
+								<form:Form>
+									<form:layout>
+										<form:ResponsiveGridLayout/>
+									</form:layout>
+									<form:formContainers>
+										<form:FormContainer title="Плановый График">
+											<form:FormElement label="Время Начала" visible="{=(${/Transportation/KickOffDate} !== null)}">
+												<form:fields>
+													<!--pattern: 'HH:mm / yyyy-MM-dd'-->
+													<Text text="{path:'/Transportation/KickOffDate', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время Поиска" visible="{=(${/Transportation/AssignmentTimeMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/AssignmentTimeMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Водитель Найден" visible="{=(${/Transportation/TruckAssignedDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/TruckAssignedDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время прибытия" visible="{=(${/Transportation/ArrivalTimeMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/ArrivalTimeMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Прибыл в" visible="{=(${/Transportation/StartDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/StartDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время Ожидания Загрузки" visible="{=(${/Transportation/LoadQueueTimeMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/LoadQueueTimeMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Загрузка Начинается" visible="{=(${/Transportation/LoadStartDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/LoadStartDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время Загрузки" visible="{=(${/Transportation/LoadTimeMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/LoadTimeMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Перевозка Начинается в" visible="{=(${/Transportation/TravelStartDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/TravelStartDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время Перевозки" visible="{=(${/Transportation/TravelTimeMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/TravelTimeMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Прибытия в" visible="{=(${/Transportation/UnloadQueueStartDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/UnloadQueueStartDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время Ожидания Разгрузки" visible="{=(${/Transportation/UnloadQueueTimeMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/UnloadQueueTimeMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Разгрузка Начинается в" visible="{=(${/Transportation/UnloadStartDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/UnloadStartDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время Разгрузки" visible="{=(${/Transportation/UnloadTimeMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/UnloadTimeMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Окончание" visible="{=(${/Transportation/EndDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/EndDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+										</form:FormContainer>
+										<form:FormContainer title="Фактический График">
+											<form:FormElement label="Время Начала" visible="{=(${/Transportation/KickOffDate} !== null)}">
+												<form:fields>
+													<!--pattern: 'HH:mm / yyyy-MM-dd'-->
+													<Text text="{path:'/Transportation/KickOffDate', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время Поиска" visible="{=(${/Transportation/AssignmentTimeActualMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/AssignmentTimeActualMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Водитель Найден" visible="{=(${/Transportation/TruckAssignedActualDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/TruckAssignedActualDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Время Прибытия" visible="{=(${/Transportation/ArrivalTimeActualMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/ArrivalTimeActualMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Arrived to Loading at" visible="{=(${/Transportation/StartActualDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/StartActualDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Load Queue time" visible="{=(${/Transportation/LoadQueueTimeActualMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/LoadQueueTimeActualMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Load starts at" visible="{=(${/Transportation/LoadStartActualDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/LoadStartActualDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Load time" visible="{=(${/Transportation/LoadTimeActualMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/LoadTimeActualMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Travel starts at" visible="{=(${/Transportation/TravelStartActualDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/TravelStartActualDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Travel time" visible="{=(${/Transportation/TravelTimeActualMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/TravelTimeActualMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Arrived to Unload at" visible="{=(${/Transportation/UnloadQueueStartActualDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/UnloadQueueStartActualDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Unload Queue time" visible="{=(${/Transportation/UnloadQueueTimeActualMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/UnloadQueueTimeActualMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Unload Stars at" visible="{=(${/Transportation/UnloadStartActualDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/UnloadStartActualDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Unload time" visible="{=(${/Transportation/UnloadTimeActualMinutes} !== null)}">
+												<form:fields>
+													<Text text="{/Transportation/UnloadTimeActualMinutes} minutes"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement label="Finished at" visible="{=(${/Transportation/EndActualDateTime} !== null)}">
+												<form:fields>
+													<Text text="{path:'/Transportation/EndActualDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { pattern: 'HH:mm' }}"/>
+												</form:fields>
+											</form:FormElement>
+										</form:FormContainer>
+									</form:formContainers>
+								</form:Form>
 							</IconTabFilter>
 						</items>
 					</IconTabBar>
 				</semantic:content>
-				<semantic:mainAction>
-					<semantic:MainAction text="Сообщить о проблеме" press="onAddRoadEvent"/>
-				</semantic:mainAction>
-				<!--<semantic:customFooterContent>
-					icon="sap-icon://alert"
-					<Button icon="sap-icon://decline" text="Cancel" press="onTransporationCancel"/>
-					<Button icon="sap-icon://accept" text="Release" press="onTransporationRelease"/>
-					<Button icon="sap-icon://accept" text="Send Requests" press="onTransporationSendRequests"/>
-					<Button icon="sap-icon://save" text="Save" press="onTransporationSave"/>
-				</semantic:customFooterContent>-->
+				<semantic:customFooterContent>
+					<Button icon="sap-icon://accept" text="Принять Заказ" press="onTransportationAccept"
+						visible="{=(${/Transportation/Status} === '043.REQUESTS_SENT')}"/>
+					<Button icon="sap-icon://decline" text="Отклонить Заказ" press="onTransportationReject"
+						visible="{=(${/Transportation/Status} === '043.REQUESTS_SENT')}"/>
+					<Button icon="sap-icon://locate-me" text="Открыть в Навигаторе" press="onOpenInNavigator"
+						visible="{=(${/Transportation/Status} === '049.ASSIGNED')}"/>
+					<Button icon="sap-icon://accept" text="Подтвердить Завершение" press="onTransportationCompleted"
+						visible="{=(${/Transportation/Status} === '049.ASSIGNED')}"/>
+					<Button icon="sap-icon://quality-issue" text="Сообщить о Проблеме" press="onAddRoadEvent"/>
+				</semantic:customFooterContent>
 			</semantic:MasterPage>
 		</pages>
 	</App>
